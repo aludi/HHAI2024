@@ -1,0 +1,328 @@
+
+net {
+  name = unnamedBN;
+  software = "aGrUM 0.22.7";
+  node_size = (50 50);
+}
+
+node PlanBarnF {
+   states = (f t );
+   label = "PlanBarnF";
+   ID = "PlanBarnF";
+}
+
+node DebtFightFK {
+   states = (f t );
+   label = "DebtFightFK";
+   ID = "DebtFightFK";
+}
+
+node FBarn {
+   states = (f t );
+   label = "FBarn";
+   ID = "FBarn";
+}
+
+node TMathus {
+   states = (f t );
+   label = "TMathus";
+   ID = "TMathus";
+}
+
+node TSLocation {
+   states = (f t );
+   label = "TSLocation";
+   ID = "TSLocation";
+}
+
+node TSF1 {
+   states = (f t );
+   label = "TSF1";
+   ID = "TSF1";
+}
+
+node KBarn {
+   states = (f t );
+   label = "KBarn";
+   ID = "KBarn";
+}
+
+node Body {
+   states = (f t );
+   label = "Body";
+   ID = "Body";
+}
+
+node TStengun {
+   states = (f t );
+   label = "TStengun";
+   ID = "TStengun";
+}
+
+node TSF2 {
+   states = (f t );
+   label = "TSF2";
+   ID = "TSF2";
+}
+
+node FStenGun {
+   states = (f t );
+   label = "FStenGun";
+   ID = "FStenGun";
+}
+
+node KKilled {
+   states = (f t );
+   label = "KKilled";
+   ID = "KKilled";
+}
+
+node ShootStenGun {
+   states = (noone F ~F );
+   label = "ShootStenGun";
+   ID = "ShootStenGun";
+}
+
+node SBarn {
+   states = (f t );
+   label = "SBarn";
+   ID = "SBarn";
+}
+
+node FightBarn {
+   states = (f t );
+   label = "FightBarn";
+   ID = "FightBarn";
+}
+
+node Murder {
+   states = (f t );
+   label = "Murder";
+   ID = "Murder";
+}
+
+node Killed {
+   states = (f t );
+   label = "Killed";
+   ID = "Killed";
+}
+
+node Intent {
+   states = (f t );
+   label = "Intent";
+   ID = "Intent";
+}
+
+node Premed {
+   states = (f t );
+   label = "Premed";
+   ID = "Premed";
+}
+
+node Prov {
+   states = (f t );
+   label = "Prov";
+   ID = "Prov";
+}
+
+node Help {
+   states = (f t );
+   label = "Help";
+   ID = "Help";
+}
+
+node Murdered {
+   states = (f t );
+   label = "Murdered";
+   ID = "Murdered";
+}
+
+node ComplicityMurder {
+   states = (f t );
+   label = "ComplicityMurder";
+   ID = "ComplicityMurder";
+}
+
+potential ( PlanBarnF | DebtFightFK   ) {
+   data = 
+   ((   0.9999   0.0001)   % DebtFightFK=f   
+   (   0.333333   0.666667));   % DebtFightFK=t   
+}
+
+potential (DebtFightFK) {
+   data = (  0.5 0.5);
+}
+
+potential ( FBarn | PlanBarnF   ) {
+   data = 
+   ((   1   0)   % PlanBarnF=f   
+   (   0.5   0.5));   % PlanBarnF=t   
+}
+
+potential ( TMathus | DebtFightFK   PlanBarnF   ) {
+   data = 
+   (((   1   0)   % PlanBarnF=f   DebtFightFK=f   
+   (   1   0))   % PlanBarnF=t   DebtFightFK=f   
+   ((   1   0)   % PlanBarnF=f   DebtFightFK=t   
+   (   0   1)));   % PlanBarnF=t   DebtFightFK=t   
+}
+
+potential ( TSLocation | KBarn   SBarn   ) {
+   data = 
+   (((   1   0)   % SBarn=f   KBarn=f   
+   (   1   0))   % SBarn=t   KBarn=f   
+   ((   1   0)   % SBarn=f   KBarn=t   
+   (   0   1)));   % SBarn=t   KBarn=t   
+}
+
+potential ( TSF1 | FBarn   ) {
+   data = 
+   ((   0.999   0.001)   % FBarn=f   
+   (   0.1   0.9));   % FBarn=t   
+}
+
+potential ( KBarn | PlanBarnF   ) {
+   data = 
+   ((   1   0)   % PlanBarnF=f   
+   (   0.1   0.9));   % PlanBarnF=t   
+}
+
+potential ( Body | KKilled   ) {
+   data = 
+   ((   1   0)   % KKilled=f   
+   (   0   1));   % KKilled=t   
+}
+
+potential ( TStengun | FStenGun   ) {
+   data = 
+   ((   0.5   0.5)   % FStenGun=f   
+   (   0.2   0.8));   % FStenGun=t   
+}
+
+potential ( TSF2 | TSF1   FBarn   ) {
+   data = 
+   (((   0.5   0.5)   % FBarn=f   TSF1=f   
+   (   0.9   0.1))   % FBarn=t   TSF1=f   
+   ((   0.5   0.5)   % FBarn=f   TSF1=t   
+   (   0.999   0.001)));   % FBarn=t   TSF1=t   
+}
+
+potential (FStenGun) {
+   data = (  0.5 0.5);
+}
+
+potential ( KKilled | ShootStenGun   ) {
+   data = 
+   ((   1   0)   % ShootStenGun=noone   
+   (   0   1)   % ShootStenGun=F   
+   (   0   1));   % ShootStenGun=~F   
+}
+
+potential ( ShootStenGun | FightBarn   KBarn   FStenGun   FBarn   ) {
+   data = 
+   (((((   1   0   0)   % FBarn=f   FStenGun=f   KBarn=f   FightBarn=f   
+   (   1   0   0))   % FBarn=t   FStenGun=f   KBarn=f   FightBarn=f   
+   ((   1   0   0)   % FBarn=f   FStenGun=t   KBarn=f   FightBarn=f   
+   (   1   0   0)))   % FBarn=t   FStenGun=t   KBarn=f   FightBarn=f   
+   (((   0.5   0   0.5)   % FBarn=f   FStenGun=f   KBarn=t   FightBarn=f   
+   (   0.5   0   0.5))   % FBarn=t   FStenGun=f   KBarn=t   FightBarn=f   
+   ((   0.5   0   0.5)   % FBarn=f   FStenGun=t   KBarn=t   FightBarn=f   
+   (   0.99502   0.00398406   0.000996016))))   % FBarn=t   FStenGun=t   KBarn=t   FightBarn=f   
+   ((((   1   0   0)   % FBarn=f   FStenGun=f   KBarn=f   FightBarn=t   
+   (   1   0   0))   % FBarn=t   FStenGun=f   KBarn=f   FightBarn=t   
+   ((   1   0   0)   % FBarn=f   FStenGun=t   KBarn=f   FightBarn=t   
+   (   1   0   0)))   % FBarn=t   FStenGun=t   KBarn=f   FightBarn=t   
+   (((   0.5   0   0.5)   % FBarn=f   FStenGun=f   KBarn=t   FightBarn=t   
+   (   0.9995   0.0001   0.0004))   % FBarn=t   FStenGun=f   KBarn=t   FightBarn=t   
+   ((   0.5   0   0.5)   % FBarn=f   FStenGun=t   KBarn=t   FightBarn=t   
+   (   0   0.909091   0.0909091)))));   % FBarn=t   FStenGun=t   KBarn=t   FightBarn=t   
+}
+
+potential ( SBarn | PlanBarnF   ) {
+   data = 
+   ((   1   0)   % PlanBarnF=f   
+   (   0.1   0.9));   % PlanBarnF=t   
+}
+
+potential ( FightBarn | FBarn   DebtFightFK   KBarn   ) {
+   data = 
+   ((((   1   0)   % KBarn=f   DebtFightFK=f   FBarn=f   
+   (   1   0))   % KBarn=t   DebtFightFK=f   FBarn=f   
+   ((   1   0)   % KBarn=f   DebtFightFK=t   FBarn=f   
+   (   1   0)))   % KBarn=t   DebtFightFK=t   FBarn=f   
+   (((   1   0)   % KBarn=f   DebtFightFK=f   FBarn=t   
+   (   1   0))   % KBarn=t   DebtFightFK=f   FBarn=t   
+   ((   1   0)   % KBarn=f   DebtFightFK=t   FBarn=t   
+   (   0.1   0.9))));   % KBarn=t   DebtFightFK=t   FBarn=t   
+}
+
+potential ( Murder | Killed   Premed   Intent   ) {
+   data = 
+   ((((   1   0)   % Intent=f   Premed=f   Killed=f   
+   (   1   0))   % Intent=t   Premed=f   Killed=f   
+   ((   1   0)   % Intent=f   Premed=t   Killed=f   
+   (   1   0)))   % Intent=t   Premed=t   Killed=f   
+   (((   1   0)   % Intent=f   Premed=f   Killed=t   
+   (   1   0))   % Intent=t   Premed=f   Killed=t   
+   ((   1   0)   % Intent=f   Premed=t   Killed=t   
+   (   0   1))));   % Intent=t   Premed=t   Killed=t   
+}
+
+potential ( Killed | ShootStenGun   KKilled   ) {
+   data = 
+   (((   1   0)   % KKilled=f   ShootStenGun=noone   
+   (   1   0))   % KKilled=t   ShootStenGun=noone   
+   ((   1   0)   % KKilled=f   ShootStenGun=F   
+   (   0   1))   % KKilled=t   ShootStenGun=F   
+   ((   1   0)   % KKilled=f   ShootStenGun=~F   
+   (   1   0)));   % KKilled=t   ShootStenGun=~F   
+}
+
+potential ( Intent | ShootStenGun   ) {
+   data = 
+   ((   1   0)   % ShootStenGun=noone   
+   (   0   1)   % ShootStenGun=F   
+   (   1   0));   % ShootStenGun=~F   
+}
+
+potential ( Premed | FightBarn   PlanBarnF   ) {
+   data = 
+   (((   1   0)   % PlanBarnF=f   FightBarn=f   
+   (   1   0))   % PlanBarnF=t   FightBarn=f   
+   ((   1   0)   % PlanBarnF=f   FightBarn=t   
+   (   0   1)));   % PlanBarnF=t   FightBarn=t   
+}
+
+potential ( Prov | PlanBarnF   ) {
+   data = 
+   ((   1   0)   % PlanBarnF=f   
+   (   0   1));   % PlanBarnF=t   
+}
+
+potential (Help) {
+   data = (  999 1);
+}
+
+potential ( Murdered | ShootStenGun   KKilled   ) {
+   data = 
+   (((   1   0)   % KKilled=f   ShootStenGun=noone   
+   (   1   0))   % KKilled=t   ShootStenGun=noone   
+   ((   1   0)   % KKilled=f   ShootStenGun=F   
+   (   1   0))   % KKilled=t   ShootStenGun=F   
+   ((   1   0)   % KKilled=f   ShootStenGun=~F   
+   (   0   1)));   % KKilled=t   ShootStenGun=~F   
+}
+
+potential ( ComplicityMurder | Prov   Help   Murdered   ) {
+   data = 
+   ((((   1   0)   % Murdered=f   Help=f   Prov=f   
+   (   1   0))   % Murdered=t   Help=f   Prov=f   
+   ((   1   0)   % Murdered=f   Help=t   Prov=f   
+   (   0   1)))   % Murdered=t   Help=t   Prov=f   
+   (((   1   0)   % Murdered=f   Help=f   Prov=t   
+   (   0   1))   % Murdered=t   Help=f   Prov=t   
+   ((   1   0)   % Murdered=f   Help=t   Prov=t   
+   (   0   1))));   % Murdered=t   Help=t   Prov=t   
+}
+
+
